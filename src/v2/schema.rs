@@ -197,6 +197,13 @@ pub struct Parameter {
     pub items: Option<Schema>,
     #[serde(skip_serializing_if = "Option::is_none")]
     default: Option<serde_json::Value>,
+    #[serde(
+        rename = "additionalProperties",
+        skip_serializing_if = "Option::is_none"
+    )]
+    additional_properties: Option<Schema>,
+    #[serde(rename = "collectionFormat", skip_serializing_if = "Option::is_none")]
+    collection_format: Option<String>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Default)]
@@ -212,54 +219,7 @@ pub struct Response {
 #[serde(untagged)]
 pub enum ParameterOrRef {
     /// both bodyParameter and nonBodyParameter in one for now
-    Parameter {
-        /// The name of the parameter.
-        name: String,
-        /// values depend on parameter type
-        /// may be `header`, `query`, 'path`, `formData`
-        #[serde(rename = "in")]
-        location: String,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        required: Option<bool>,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        schema: Option<Schema>,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        #[serde(rename = "uniqueItems")]
-        unique_items: Option<bool>,
-        /// string, number, boolean, integer, array, file ( only for formData )
-        #[serde(skip_serializing_if = "Option::is_none")]
-        #[serde(rename = "type")]
-        param_type: Option<String>,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        format: Option<String>,
-        /// A brief description of the parameter. This could contain examples
-        /// of use.  GitHub Flavored Markdown is allowed.
-        #[serde(skip_serializing_if = "Option::is_none")]
-        description: Option<String>,
-        #[serde(rename = "collectionFormat", skip_serializing_if = "Option::is_none")]
-        collection_format: Option<String>,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        default: Option<serde_json::Value>,
-        // maximum ?
-        // exclusiveMaximum ??
-        // minimum ??
-        // exclusiveMinimum ??
-        // maxLength ??
-        // minLength ??
-        // pattern ??
-        // maxItems ??
-        // minItems ??
-        // enum ??
-        // multipleOf ??
-        // allowEmptyValue ( for query / body params )
-        #[serde(skip_serializing_if = "Option::is_none")]
-        items: Option<Schema>,
-        #[serde(
-            rename = "additionalProperties",
-            skip_serializing_if = "Option::is_none"
-        )]
-        additional_properties: Option<Schema>,
-    },
+    Parameter(Parameter),
     Ref {
         #[serde(rename = "$ref")]
         ref_path: String,
