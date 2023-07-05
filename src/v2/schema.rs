@@ -164,7 +164,7 @@ pub struct Operation {
     pub tags: Option<Vec<String>>,
     #[serde(rename = "operationId", skip_serializing_if = "Option::is_none")]
     pub operation_id: Option<String>,
-    pub responses: BTreeMap<String, Response>,
+    pub responses: BTreeMap<String, ResponseOrRef>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Vec<ParameterOrRef>>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -225,6 +225,19 @@ pub enum ParameterOrRef {
         ref_path: String,
     },
 }
+
+// todo: support x-* fields
+/// https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#parameter-object
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(untagged)]
+pub enum ResponseOrRef {
+    Response(Response),
+    Ref {
+        #[serde(rename = "$ref")]
+        ref_path: String,
+    },
+}
+
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(tag = "type")]
 pub enum Security {
