@@ -284,7 +284,7 @@ pub struct Schema {
     pub format: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "enum")]
-    pub enum_values: Option<Vec<String>>,
+    pub enum_values: Option<Vec<serde_json::Value>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub required: Option<Vec<String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
