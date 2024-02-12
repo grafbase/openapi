@@ -1,6 +1,5 @@
 //! Error types
 
-use semver::{SemVerError, Version};
 use serde_json::Error as JsonError;
 use serde_yaml::Error as YamlError;
 use std::io::Error as IoError;
@@ -16,7 +15,7 @@ pub enum Error {
     #[error("JSON serialization error")]
     Serialize(#[from] JsonError),
     #[error("Semantic Versioning parsing error")]
-    SemVerError(#[from] SemVerError),
+    SemVerError(#[from] semver::Error),
     #[error("Unsupported spec file version ({0})")]
-    UnsupportedSpecFileVersion(Version),
+    UnsupportedSpecFileVersion(semver::Version),
 }
